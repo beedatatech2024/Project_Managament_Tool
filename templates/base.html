@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BeeData Project Management Tool</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='genius-logo.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='light-theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='brand-theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='animation-theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='background-theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='typography-theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='sidebar-theme.css') }}">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="beedata-logo" href="{{ url_for('dashboard') }}"><img class="beedata-image" src="https://beedatatech.com/Beedata/admin/assets/images/Capture.png" alt="BeeData"></a>
+    <div class="sidebar-rule"></div>
+    <nav class="legacy-nav" aria-label="Primary navigation">
+      <a class="nav-standalone {% if request.endpoint == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><b>&#9638;</b><span>Dashboard</span></a>
+
+      {% set workspace_active = request.endpoint in ['projects', 'tasks', 'gantt', 'create_dependency', 'delete_dependency', 'create_milestone', 'delete_milestone', 'timeline', 'workload', 'capacity'] %}
+      <section class="nav-group" data-group="workspace" data-active="{{ 'true' if workspace_active else 'false' }}">
+        <button class="nav-group-toggle" type="button" aria-expanded="{{ 'true' if workspace_active else 'false' }}"><span class="nav-group-icon">&#9638;</span><span>WORKSPACE</span><span class="nav-chevron" aria-hidden="true">&#8964;</span></button>
+        <div class="nav-group-items">
+          <a class="nav-child {% if request.endpoint == 'projects' %}active{% endif %}" href="{{ url_for('projects') }}"><b>&#9635;</b><span>Projects</span></a>
+          <a class="nav-child {% if request.endpoint == 'tasks' %}active{% endif %}" href="{{ url_for('tasks') }}"><b>&#10003;</b><span>Tasks</span></a>
+          <a class="nav-child {% if request.endpoint in ['gantt', 'create_dependency', 'delete_dependency', 'create_milestone', 'delete_milestone'] %}active{% endif %}" href="{{ url_for('gantt') }}"><b>&#9641;</b><span>Gantt</span></a>
+          <a class="nav-child {% if request.endpoint == 'timeline' %}active{% endif %}" href="{{ url_for('timeline') }}"><b>&#9643;</b><span>Timeline</span></a>
+          <a class="nav-child {% if request.endpoint == 'workload' %}active{% endif %}" href="{{ url_for('workload') }}"><b>&#9675;</b><span>Workload</span></a>
+          <a class="nav-child {% if request.endpoint == 'capacity' %}active{% endif %}" href="{{ url_for('capacity') }}"><b>&#9634;</b><span>Capacity</span></a>
+        </div>
+      </section>
+
+      {% set tracking_active = request.endpoint in ['issues', 'notifications'] %}
+      <section class="nav-group" data-group="tracking" data-active="{{ 'true' if tracking_active else 'false' }}">
+        <button class="nav-group-toggle" type="button" aria-expanded="{{ 'true' if tracking_active else 'false' }}"><span class="nav-group-icon">&#9673;</span><span>TRACKING</span><span class="nav-chevron" aria-hidden="true">&#8964;</span></button>
+        <div class="nav-group-items">
+          <a class="nav-child {% if request.endpoint == 'issues' %}active{% endif %}" href="{{ url_for('issues') }}"><b>&#9881;</b><span>Issues</span></a>
+          <a class="nav-child {% if request.endpoint == 'notifications' %}active{% endif %}" href="{{ url_for('notifications') }}"><b>&#9833;</b><span>Notifications</span></a>
+        </div>
+      </section>
+
+      {% set delivery_active = request.endpoint in ['sprints', 'releases', 'reports'] %}
+      <section class="nav-group" data-group="delivery" data-active="{{ 'true' if delivery_active else 'false' }}">
+        <button class="nav-group-toggle" type="button" aria-expanded="{{ 'true' if delivery_active else 'false' }}"><span class="nav-group-icon">&#9636;</span><span>DELIVERY</span><span class="nav-chevron" aria-hidden="true">&#8964;</span></button>
+        <div class="nav-group-items">
+          <a class="nav-child {% if request.endpoint == 'sprints' %}active{% endif %}" href="{{ url_for('sprints') }}"><b>&#9672;</b><span>Sprints</span></a>
+          <a class="nav-child {% if request.endpoint == 'releases' %}active{% endif %}" href="{{ url_for('releases') }}"><b>&#9670;</b><span>Releases</span></a>
+          <a class="nav-child {% if request.endpoint == 'reports' %}active{% endif %}" href="{{ url_for('reports') }}"><b>&#9632;</b><span>Reports</span></a>
+        </div>
+      </section>
+
+      {% set admin_active = request.endpoint in ['automations', 'toggle_automation', 'delete_automation', 'integrations', 'disconnect_integration', 'settings', 'change_password', 'update_member_role', 'update_role_permission'] %}
+      <section class="nav-group" data-group="administration" data-active="{{ 'true' if admin_active else 'false' }}">
+        <button class="nav-group-toggle" type="button" aria-expanded="{{ 'true' if admin_active else 'false' }}"><span class="nav-group-icon">&#9881;</span><span>ADMINISTRATION</span><span class="nav-chevron" aria-hidden="true">&#8964;</span></button>
+        <div class="nav-group-items">
+          <a class="nav-child {% if request.endpoint in ['automations', 'toggle_automation', 'delete_automation'] %}active{% endif %}" href="{{ url_for('automations') }}"><b>&#9881;</b><span>Automations</span></a>
+          <a class="nav-child {% if request.endpoint in ['integrations', 'disconnect_integration'] %}active{% endif %}" href="{{ url_for('integrations') }}"><b>&#8984;</b><span>Integrations</span></a>
+          <a class="nav-child {% if request.endpoint == 'settings' %}active{% endif %}" href="{{ url_for('settings') }}"><b>&#9881;</b><span>Settings</span></a>
+        </div>
+      </section>
+
+      {% set methodology_active = request.endpoint == 'legacy_module' %}
+      <section class="nav-group nav-group-secondary" data-group="methodologies" data-active="{{ 'true' if methodology_active else 'false' }}">
+        <button class="nav-group-toggle" type="button" aria-expanded="{{ 'true' if methodology_active else 'false' }}"><span class="nav-group-icon">&#10022;</span><span>METHODOLOGIES</span><span class="nav-chevron" aria-hidden="true">&#8964;</span></button>
+        <div class="nav-group-items">
+          <a class="nav-child {% if request.view_args and request.view_args.get('module') == 'waterfall' %}active{% endif %}" href="{{ url_for('legacy_module', module='waterfall') }}"><b>&#9679;</b><span>Waterfall</span></a>
+          <a class="nav-child {% if request.view_args and request.view_args.get('module') == 'agile' %}active{% endif %}" href="{{ url_for('legacy_module', module='agile') }}"><b>&#9635;</b><span>Agile</span></a>
+          <a class="nav-child {% if request.view_args and request.view_args.get('module') == 'devops' %}active{% endif %}" href="{{ url_for('legacy_module', module='devops') }}"><b>&#9632;</b><span>DevOps</span></a>
+          <a class="nav-child {% if request.view_args and request.view_args.get('module') == 'rapid' %}active{% endif %}" href="{{ url_for('legacy_module', module='rapid') }}"><b>&#9827;</b><span>Rapid Application</span></a>
+        </div>
+      </section>
+    </nav>
+    <div class="sidebar-bottom"><div class="user-mini"><span class="avatar">{{ (current_user.email or 'U')[0]|upper }}</span><div><strong>{{ current_user.email.split('@')[0] if current_user.email else 'User' }}</strong><small>Workspace member</small></div></div><a class="logout" href="{{ url_for('logout') }}">&#8617; Sign out</a></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="topbar-left"><span class="app-title">BeeData Project Management Tool</span><span class="slash">/</span><strong>{% block page_name %}Dashboard{% endblock %}</strong></div><div class="topbar-right"><div class="top-search"><span>&#8981;</span><input type="search" placeholder="Search workspace..."></div><span class="top-icon">&#9633;</span><span class="top-icon">&#9833;</span><span class="top-icon user-top">{{ (current_user.email or 'U')[0]|upper }}</span></div></header>
+    {% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-wrap">{% for category,message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    <section class="content">{% block content %}{% endblock %}</section>
+  </main>
+</div>
+<script>
+(function () {
+  const storageKey = 'beedata-sidebar-groups-v2';
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}') || {}; } catch (error) { saved = {}; }
+  document.querySelectorAll('.nav-group').forEach(function (group) {
+    const toggle = group.querySelector('.nav-group-toggle');
+    const active = group.dataset.active === 'true';
+    const hasSaved = Object.prototype.hasOwnProperty.call(saved, group.dataset.group);
+    const open = active || (hasSaved ? saved[group.dataset.group] === true : false);
+    group.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.addEventListener('click', function () {
+      const next = !group.classList.contains('is-open');
+      group.classList.toggle('is-open', next);
+      toggle.setAttribute('aria-expanded', String(next));
+      saved[group.dataset.group] = next;
+      localStorage.setItem(storageKey, JSON.stringify(saved));
+    });
+  });
+}());
+</script>
+</body>
+</html>

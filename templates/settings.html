@@ -1,0 +1,27 @@
+﻿{% extends 'base.html' %}
+{% block title %}BeeData Project Management Tool{% endblock %}
+{% block page_name %}Settings{% endblock %}
+{% block content %}
+<div class="page-intro"><div><span class="kicker">WORKSPACE</span><h1>Settings</h1><p>Manage workspace, profile, notifications, security, roles, and permissions.</p></div></div>
+<div class="layout-grid">
+  <section class="panel form-panel">
+    <span class="kicker">WORKSPACE SETTINGS</span><h2>Workspace profile</h2>
+    <form method="post"><input type="hidden" name="action" value="workspace"><label>Workspace name<input name="workspace_name" value="{{ settings.workspace_name or 'BeeData Project Management Tool' }}" required></label><label>Timezone<input name="timezone" value="{{ settings.timezone or 'Asia/Calcutta' }}"></label><label>Date format<input name="date_format" value="{{ settings.date_format or 'YYYY-MM-DD' }}"></label><button class="button primary full">Save workspace</button></form>
+  </section>
+  <section class="panel form-panel">
+    <span id="profile" class="kicker">PROFILE</span><h2>Your profile</h2>
+    <form method="post"><input type="hidden" name="action" value="profile"><label>Full name<input name="full_name" value="{{ profile.full_name or current_user.email }}" required></label><label>Avatar color<input type="color" name="avatar_color" value="{{ profile.avatar_color or '#5eead4' }}"></label><button class="button primary full">Save profile</button></form>
+  </section>
+  <section class="panel form-panel">
+    <span class="kicker">NOTIFICATIONS</span><h2>Notification preferences</h2>
+    <form method="post"><input type="hidden" name="action" value="preferences"><label class="check-label"><input type="checkbox" name="email_notifications" {% if preferences.email_notifications is not defined or preferences.email_notifications %}checked{% endif %}> Email notifications</label><label class="check-label"><input type="checkbox" name="in_app_notifications" {% if preferences.in_app_notifications is not defined or preferences.in_app_notifications %}checked{% endif %}> In-app notifications</label><label>Digest frequency<select name="digest_frequency"><option value="never" {% if preferences.digest_frequency == 'never' %}selected{% endif %}>Never</option><option value="instant" {% if preferences.digest_frequency == 'instant' %}selected{% endif %}>Instant</option><option value="daily" {% if preferences.digest_frequency in (none, '', 'daily') %}selected{% endif %}>Daily</option><option value="weekly" {% if preferences.digest_frequency == 'weekly' %}selected{% endif %}>Weekly</option></select></label><button class="button primary full">Save notifications</button></form>
+  </section>
+  <section class="panel form-panel">
+    <span class="kicker">SECURITY</span><h2>Change password</h2>
+    <form method="post" action="{{ url_for('change_password') }}"><label>New password<input type="password" name="new_password" minlength="8" required></label><label>Confirm password<input type="password" name="confirm_password" minlength="8" required></label><button class="button secondary full">Update password</button></form><p class="muted-text">Password changes are handled by Supabase Auth.</p>
+  </section>
+</div>
+<section class="panel settings-wide"><div class="panel-head"><div><span id="roles" class="kicker">ROLE ADMINISTRATION</span><h2>Workspace members</h2></div></div>{% for member in members %}<div class="task-card"><span class="avatar">{{ (member.full_name or member.email)[0]|upper }}</span><div class="grow"><strong>{{ member.full_name or member.email }}</strong><small>{{ member.email }}</small></div><form method="post" action="{{ url_for('update_member_role', user_id=member.id) }}"><select name="role"><option value="member" {% if member.role == 'member' %}selected{% endif %}>Member</option><option value="manager" {% if member.role == 'manager' %}selected{% endif %}>Manager</option><option value="admin" {% if member.role == 'admin' %}selected{% endif %}>Admin</option></select><button class="button secondary">Save role</button></form></div>{% else %}<div class="empty">No members found.</div>{% endfor %}</section>
+<section class="panel settings-wide"><div class="panel-head"><div><span id="permissions" class="kicker">PERMISSIONS</span><h2>Role permissions</h2></div></div>{% for permission in permissions %}<div class="task-card"><div class="grow"><strong>{{ permission.role|title }} Â· {{ permission.permission }}</strong><small>Controlled by administrator policy</small></div><form method="post" action="{{ url_for('update_role_permission', role=permission.role, permission=permission.permission) }}"><label class="check-label"><input type="checkbox" name="enabled" {% if permission.enabled %}checked{% endif %} onchange="this.form.submit()"> Enabled</label></form></div>{% else %}<div class="empty">Run migration 006 to enable role permission administration.</div>{% endfor %}</section>
+{% endblock %}
+

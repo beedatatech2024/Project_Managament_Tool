@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BeeData Project Management Tool</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='genius-logo.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='login-theme.css') }}">
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="login-app-name">BeeData Project Management Tool</div>
+    <span class="kicker">DATABASE SETUP REQUIRED</span>
+    <h1>One last step.</h1>
+    <p class="login-copy">Your login worked, but one or more workspace tables or columns are missing. Run these files in Supabase SQL Editor, in order: <strong>001_initial.sql</strong>, <strong>002_workflows.sql</strong>, <strong>003_legacy_pmt_data.sql</strong>, then <strong>004_completion_workflows.sql</strong>.</p>
+    <a class="button primary full" href="{{ url_for('dashboard') }}">Try again</a>
+    <a class="logout" href="{{ url_for('logout') }}">Sign out</a>
+  </div>
+</body>
+</html>
